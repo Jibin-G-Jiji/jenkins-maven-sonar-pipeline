@@ -1,13 +1,10 @@
-# You can change this base image to anything else
-# But make sure to use the correct version of Java
-FROM adoptopenjdk/openjdk11:alpine-jre
+FROM maven:3.9.6-eclipse-temurin-17
 
-# Simply the artifact path
-ARG artifact=target/spring-boot-web.jar
+# Install any extra tools you need (optional)
+RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /opt/app
-
-COPY ${artifact} app.jar
-
-# This should not be changed
-ENTRYPOINT ["java","-jar","app.jar"]
+# Verify installations
+RUN mvn --version && java -version
